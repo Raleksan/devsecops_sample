@@ -108,6 +108,7 @@ jobs:
         with:
           target: http://127.0.0.1:8000
           cmd_options: '-J report_json.json -w report_md.md -r report_html.html'
+          allow_issue_writing: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

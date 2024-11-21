@@ -96,7 +96,7 @@ jobs:
       - name: Deploy PyGoat
         run: |
           source venv/bin/activate
-          python manage.py runserver
+          nohup python manage.py runserver &
 
       # Wait for PyGoat to start
       - name: Wait for PyGoat to start

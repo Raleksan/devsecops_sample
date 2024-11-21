@@ -78,7 +78,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-
+    
       # Install PyGoat dependencies
       - name: Install PyGoat dependencies
         run: |
@@ -86,16 +86,17 @@ jobs:
           source venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
+          
+      - name: Apply migrations
+        run: |
+          source venv/bin/activate
+          python manage.py migrate
 
       # Deploy PyGoat
       - name: Deploy PyGoat
         run: |
           source venv/bin/activate
-          nohup python app.py &
-        env:
-          FLASK_ENV: development
-          FLASK_APP: app.py
-          PORT: 5000
+          python manage.py runserver
 
       # Wait for PyGoat to start
       - name: Wait for PyGoat to start
@@ -105,7 +106,7 @@ jobs:
       - name: Run OWASP ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.13.0
         with:
-          target: http://127.0.0.1:5000
+          target: http://127.0.0.1:8000
           cmd_options: '-J report_json.json -w report_md.md -r report_html.html'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
